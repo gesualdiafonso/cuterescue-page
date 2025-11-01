@@ -1,5 +1,5 @@
+import React, { useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
 import routes from "../routes/routes";
 
 function Layout() {
@@ -11,7 +11,7 @@ function Layout() {
   }, [location]);
 
   return (
-    <main>
+    <main className="mt-36">
       <Routes>
         {routes.map(({ path, element }, index) => (
           <Route key={index} path={path} element={element} />

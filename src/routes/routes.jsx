@@ -6,6 +6,7 @@ import Eventos from "../pages/Eventos";
 import Veterinaria from "../pages/Veterinarias";
 import InformePet from "../pages/InformePet";
 import DetailsUser from "../pages/DetailsUser";
+import Maps from "../pages/Maps";
 
 const routes = [
     {
@@ -47,6 +48,11 @@ const routes = [
         path: "/detalles",
         element: <DetailsUser/>,
         title: "Detalles Usuario"
+    },
+    {
+        path: "/pet-ubication",
+        element: <Maps/>,
+        title: "Ubicación de su mascota en el mapa"
     }
 ]
 

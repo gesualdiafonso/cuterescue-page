@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useSavedData } from "../context/SavedDataContext";
 import NavBarAdmin from "./ui/NavBarAdmin";
 import PetLink from "./ui/PetLink";
 import BtnLogout from "./ui/BtnLogout";
@@ -7,6 +8,9 @@ import BtnLogout from "./ui/BtnLogout";
 
 
 function Header(){
+
+    const { selectedPet } = useSavedData();
+
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -30,7 +34,7 @@ function Header(){
     }
 
     return(
-        <header className="flex flex-row gap-10 w-full h-auto px-10 py-5">
+        <header className="flex flex-row gap-10 w-full h-auto px-10 py-5 fixed top-0 left-0 bg-white shadow-md z-50 justify-between items-center">
             <div className="flex flex-row gap-10 lg:gap-5 justify-center items-center mx-auto w-full lg:w-1/2">
                 <div>
                     <Link to="/">
@@ -46,7 +50,7 @@ function Header(){
 
             <div className="flex justify-center items-center w-full">
                 <NavBarAdmin />
-                <PetLink/>
+                <PetLink pet={selectedPet}/>
             </div>
             <div className="flex justify-center items-center">
                 <BtnLogout/>

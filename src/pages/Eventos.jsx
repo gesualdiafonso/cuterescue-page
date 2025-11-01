@@ -23,7 +23,7 @@ export default function Eventos() {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="max-w-6xl w-full mx-auto">
+    <div className="max-w-6xl w-full mx-auto py-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full">
         {events.map((ev) => (
             <article key={ev.id} className="p-8 rounded-2xl bg-[#22687B] shadow-sm">
