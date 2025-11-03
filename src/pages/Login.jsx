@@ -1,6 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AuthService from "../services/AuthServices";
+import SavedDataService from "../services/SavedDataServices";
+import { useState } from "react";
+
 
 function Login() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+
+  async function handleSubmit(e){
+    e.preventDefault();
+
+    const { sucess, user, message } = await AuthService.login(email, password);
+
+    if(!sucess){
+      setError(message);
+      return;
+    }
+
+    // Carga datos del usuario logado
+    await SavedDataService.loadAllData(user.id);
+
+    navigate("/");
+
+  }
+
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center relative overflow-hidden">
       {/* Fundo com imagem */}
@@ -18,11 +45,13 @@ function Login() {
           </h2>
         </div>
 
-        <form className="w-full flex flex-col gap-8">
+        <form className="w-full flex flex-col gap-8" onSubmit={handleSubmit}>
           <div className="flex flex-col">
             <label className="font-light text-lg text-white">Email</label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="bg-white p-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-600"
             />
           </div>
@@ -31,16 +60,19 @@ function Login() {
             <label className="font-light text-lg text-white">Contraseña</label>
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="bg-white p-2 mt-2 rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-600"
             />
-            <a
+            <Link
               href="#"
               className="text-sm text-cyan-100 hover:text-white mt-2 self-end"
             >
               ¿Olvidaste la contraseña?
-            </a>
+            </Link>
           </div>
 
+          {error && <p className="text-red-200 text-sm">{error}</p>}
           <div className="flex flex-col gap-4">
             <Link
               to="/register"

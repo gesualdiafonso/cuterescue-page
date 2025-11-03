@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function Footer(){
     return(
-        <footer className="max-w-7xl mx-auto mt-10">
+        <footer className="max-w-7xl mx-auto mt-10 p-10">
             <div>
                 <Link to="/">
                     <img src="/public/assets/images/logo/logoColor.png" alt="" />

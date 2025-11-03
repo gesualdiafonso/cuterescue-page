@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import SavedDataService from "../services/SavedDataServices";
+import AuthService from "../services/AuthServices";
 import { getUserId } from "../services/UserService";
 
 const SavedDataContext = createContext();
@@ -13,7 +14,7 @@ export function SavedDataProvider({ children }) {
 
   useEffect(() => {
     async function initData() {
-      const duenoId = getUserId(); // pode vir de localStorage
+      const duenoId = AuthService.getUserId(); // pode vir de localStorage
       const { user, details, pets, selectedPet, location } = await SavedDataService.loadAllData(duenoId);
       setUser(user);
       setPets(pets);

@@ -1,4 +1,5 @@
-import Home from "../pages/Home";
+import Dashboard from "../pages/Dashboard";
+import ProtectedRout from "../components/ProtectedRoute";
 import Register from "../pages/Register"
 import Login from "../pages/Login"
 import Formulario from "../pages/Formulario"
@@ -10,8 +11,17 @@ import Maps from "../pages/Maps";
 
 const routes = [
     {
+        path: "/login",
+        element: <Login/>,
+        title: "Cute Rescue, Autenticación login"
+    },
+    {
         path: "/",
-        element: <Home />,
+        element: (
+            <ProtectedRout>
+                <Dashboard />
+            </ProtectedRout>
+        ),
         title: "Cute Rescue, la aplicación que te conecta a su mascota"
     },
     {
@@ -20,38 +30,57 @@ const routes = [
         title: "Registre en Cute Rescue, la app que conecta a su mascota"
     },
     {
-        path: "/login",
-        element: <Login/>,
-        title: "Cute Rescue, Autenticación login"
-    },
-    {
         path: "/formulario",
-        element: <Formulario/>,
+        element: (
+            <ProtectedRout>
+                <Formulario/>
+            </ProtectedRout>
+        ),
         title: "Cute Rescue, Autenticación login"
     },
     {
         path: "/veterinarias-24hrs",
-        element: <Veterinaria/>,
+        element: (
+            <ProtectedRout>
+                <Veterinaria/>
+            </ProtectedRout>
+        ),
         title: "Veterinarias 24hrs, según la ubicación que desea"
     },
     {
         path: "/eventos-ba",
-        element: <Eventos/>,
+        element: (
+            <ProtectedRout>
+                <Eventos/>
+            </ProtectedRout>
+        ),
         title: "Eventos en Buenos Aires para su Mascota."
     },
     {
         path: "/informe-pet",
-        element: <InformePet/>,
+        element: (
+            <ProtectedRout>
+                <InformePet/>
+            </ProtectedRout>
+        ),
         title: "Información de los pet"
     },
     {
         path: "/detalles",
-        element: <DetailsUser/>,
+        element: (
+            <ProtectedRout>
+                <DetailsUser/>
+            </ProtectedRout>
+        ),
         title: "Detalles Usuario"
     },
     {
         path: "/pet-ubication",
-        element: <Maps/>,
+        element: (
+            <ProtectedRout>
+                <Maps/>
+            </ProtectedRout>
+        ),
         title: "Ubicación de su mascota en el mapa"
     }
 ]

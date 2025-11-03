@@ -4,10 +4,13 @@ import { useSavedData } from "../context/SavedDataContext";
 import NavBarAdmin from "./ui/NavBarAdmin";
 import PetLink from "./ui/PetLink";
 import BtnLogout from "./ui/BtnLogout";
+import AuthServices from "../services/AuthServices";
 
 
 
 function Header(){
+
+    const isAuth = AuthServices.isAuthenticated();
 
     const { selectedPet } = useSavedData();
 
@@ -48,13 +51,17 @@ function Header(){
                 </div>
             </div>
 
-            <div className="flex justify-center items-center w-full">
-                <NavBarAdmin />
-                <PetLink pet={selectedPet}/>
-            </div>
-            <div className="flex justify-center items-center">
-                <BtnLogout/>
-            </div>
+            {isAuth && (
+                <>
+                    <div className="flex justify-center items-center w-full">
+                        <NavBarAdmin />
+                        <PetLink pet={selectedPet}/>
+                    </div>
+                    <div className="flex justify-center items-center">
+                        <BtnLogout/>
+                    </div>
+                </>
+            )}
         </header>
     )
 }
