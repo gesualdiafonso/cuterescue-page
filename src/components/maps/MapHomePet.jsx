@@ -25,8 +25,8 @@ export default function MapHomePet({ selectedPet, location }) {
   // Se não houver pet selecionado
   if (!selectedPet)
     return (
-      <div className="w-full bg-gray-100 h-96 mb-5 rounded-2xl flex items-center justify-center text-gray-500">
-        Selecione um pet
+      <div className="w-full bg-amber-400 h-96 mb-5 rounded-2xl flex items-center justify-center text-white text-5xl font-black">
+        Todavía no hay un Pet
       </div>
     );
 
@@ -34,7 +34,7 @@ export default function MapHomePet({ selectedPet, location }) {
   if (!location || !location.lat || !location.lng)
     return (
       <div className="w-full bg-gray-100 h-96 mb-5 rounded-2xl flex items-center justify-center text-gray-500">
-        Carregando localização...
+        Cargando ubicación...
       </div>
     );
 
@@ -61,7 +61,7 @@ export default function MapHomePet({ selectedPet, location }) {
           <Popup>
             <strong>{nombre}</strong> 🐾
             <br />
-            Última localização: <br />
+            Última ubicación: <br />
             {address}
           </Popup>
         </Marker>

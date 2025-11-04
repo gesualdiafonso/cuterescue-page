@@ -1,6 +1,7 @@
 import React from "react"; 
 import { Link } from "react-router-dom";
 import { useSavedData } from "../context/SavedDataContext";
+import BtnEditProfile from "./ui/BtnEditProfile";
 
 export default function DetailsInform(){
   const { user, details } = useSavedData();
@@ -44,6 +45,9 @@ export default function DetailsInform(){
               Acceder
             </Link>
           </p>
+        </div>
+        <div>
+          <BtnEditProfile />
         </div>
       </div>
     </div>

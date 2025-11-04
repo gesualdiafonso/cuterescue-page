@@ -21,11 +21,11 @@ class AuthService{
             localStorage.setItem(this.tokenKey, token);
             localStorage.setItem(this.userIdKey, user.id);
 
-            return{ sucess: true, user };
+            return{ success: true, user };
         } catch(error){
             console.error("Erro al realizar login: ", error.response?.data || error.message);
             return {
-                sucess: false,
+                success: false,
                 message: error.response?.data?.message || "Error de login"
             }
         }
@@ -40,7 +40,7 @@ class AuthService{
             });
 
             return {
-                sucess: true,
+                success: true,
                 user: response.data
             }
         } catch (error) {

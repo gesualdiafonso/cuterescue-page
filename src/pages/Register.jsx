@@ -17,13 +17,15 @@ function Register() {
       return;
     }
 
-    const { success, message } = await AuthServices.register(email, password);
+    const { success, user, message } = await AuthServices.register(email, password);
     if (!success) {
       setError(message);
       return;
     }
 
-    navigate("/login");
+    localStorage.setItem("userId", user.id);
+
+    navigate("/add-detalles");
   }
 
   return (

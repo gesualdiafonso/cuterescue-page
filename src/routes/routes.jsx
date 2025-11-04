@@ -8,6 +8,7 @@ import Veterinaria from "../pages/Veterinarias";
 import InformePet from "../pages/InformePet";
 import DetailsUser from "../pages/DetailsUser";
 import Maps from "../pages/Maps";
+import AddDetailsUser from "../pages/AddDetailsUser";
 
 const routes = [
     {
@@ -28,6 +29,11 @@ const routes = [
         path: "/register",
         element: <Register />,
         title: "Registre en Cute Rescue, la app que conecta a su mascota"
+    },
+    {
+        path: "/add-detalles",
+        element: <AddDetailsUser />,
+        title: "Agregar informaciones personales",
     },
     {
         path: "/formulario",

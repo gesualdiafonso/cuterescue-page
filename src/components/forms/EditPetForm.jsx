@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function EditPetForm({ selectedPet, onEditClick, onDeleteClick  }) {
-  if (!selectedPet) return <div>Loading pet data...</div>;
+  if (!selectedPet) return <div className="felx justify-center items-center"><h2 className="text-3xl font-black text-center my-10">Todavía el Pet no ha sido agregado</h2></div>;
 
   const { nombre, especie, raza, fecha_nacimiento, edad, sexo, color, estado_salud, activo } = selectedPet;
 

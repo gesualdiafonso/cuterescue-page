@@ -1,44 +1,53 @@
 import React from "react";
+import AddPets from "../modals/AddPets";
 
-export default function PetCards({ pets = [], selectedPet, setSelectedPet }) {
-  if (!pets || pets.length === 0) return <div>Loading pets...</div>;
-
+export default function PetCards({ pets = [], selectedPet, setSelectedPet, onPetAdded }) {
   return (
-    <div className="w-full flex gap-10">
-      {pets.map((pet) => {
-        const { nombre, activo, home_location } = pet;
-        const ubicacion = home_location ? home_location.address : "Ubicación no disponible";
-        const status = activo ? "Activo" : "Inactivo";
+    <div className="w-full flex gap-10 flex-wrap justify-start">
+      {pets && pets.length > 0 ? (
+        <>
+          {pets.map((pet) => {
+            const { nombre, activo, home_location } = pet;
+            const ubicacion = home_location ? home_location.address : "Ubicación no disponible";
+            const status = activo ? "Activo" : "Inactivo";
+            const isSelected = selectedPet?.id === pet.id;
 
-        const isSelected = selectedPet?.id === pet.id;
+            return (
+              <article
+                key={pet._id}
+                onClick={() => setSelectedPet(pet)}
+                className={`bg-[#22687b] w-full max-w-[250px] rounded-3xl h-auto p-5 flex justify-center flex-col cursor-pointer hover:scale-105 transition-transform
+                  ${isSelected ? "ring-4 ring-[#71dd5b]/40" : ""}`}
+              >
+                <div className="w-full h-52 mb-5 bg-gray-50 rounded-xl overflow-hidden">
+                  <img
+                    src={pet.foto_url || "#"}
+                    alt={nombre}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="text-white flex flex-col justify-center">
+                  <h4>{nombre}</h4>
+                  <span>
+                    <strong className="text-orange-300">Status: </strong>
+                    <span className="bg-[#71dd5b] text-white px-2 text-center rounded-lg font-light">
+                      {status}
+                    </span>
+                  </span>
+                  <strong className="text-orange-300">Ubicación:</strong>
+                  <span>{ubicacion}</span>
+                </div>
+              </article>
+            );
+          })}
 
-        return (
-          <article
-            key={pet._id}
-            onClick={() => setSelectedPet(pet)}
-            className={`bg-[#22687b] w-full rounded-3xl h-auto p-5 flex justify-center flex-col cursor-pointer hover:scale-105 transition-transform
-              ${isSelected ? "ring-4 ring-[#71dd5b]/40" : ""}`}
-          >
-            <div className="w-full h-52 mb-5 bg-gray-50 rounded-xl overflow-hidden">
-              <img src={pet.foto_url || "#"} alt={nombre} className="w-full h-full object-cover" />
-            </div>
-            <div className="text-white flex flex-col justify-center">
-              <h4>{nombre}</h4>
-              <span>
-                <strong className="text-orange-300">Status: </strong>
-                <span className="bg-[#71dd5b] text-white px-2 text-center rounded-lg font-light">{status}</span>
-              </span>
-              <strong className="text-orange-300">Ubicación:</strong>
-              <span>{ubicacion}</span>
-            </div>
-          </article>
-        );
-      })}
-
-      <article className="bg-[#f5f5dc]/50 w-full rounded-3xl flex flex-col justify-center items-center">
-        <span>+</span>
-        <p>Agregar más pet</p>
-      </article>
+          {/* Botão de adicionar pet aparece junto com os pets */}
+          <AddPets onPetAdded={onPetAdded} />
+        </>
+      ) : (
+        // Quando não há pets, só mostra o botão de adicionar
+        <AddPets onPetAdded={onPetAdded} />
+      )}
     </div>
   );
 }
