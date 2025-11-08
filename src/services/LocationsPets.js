@@ -34,4 +34,19 @@ async function loadUserPetLocation(duenoId, selectedPetId = null){
     }
 }
 
-export { loadUserPetLocation, fetchLocationsPets }
+//-----------------------------//
+//          Alerts             
+//----------------------------//
+ async function fecthAlertsByPet(pet_id){
+    try{
+        const response = await fetch(`${API_URL}/api/alerts/pet/${pet_id}`);
+        if(!response.ok) throw new Error("Error al buscar alertas")
+        const data = await response.json();
+        return data;
+    } catch (err){
+        console.log("Error al cargar alertas", err)
+        return [];
+    }
+ }
+
+export { loadUserPetLocation, fetchLocationsPets, fecthAlertsByPet }

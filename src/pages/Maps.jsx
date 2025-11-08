@@ -3,6 +3,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { useSavedData } from "../context/SavedDataContext";
+import Modal from "../components/ui/ModalAlert.jsx";
+
 
 // Ícone padrão do Leaflet
 const DefaultIcon = L.icon({
@@ -22,7 +24,8 @@ function ChangeView({ center }) {
 }
 
 export default function Map() {
-  const { selectedPet, location } = useSavedData();
+  const { selectedPet, location, alerts } = useSavedData();
+  
 
   if (!selectedPet)
     return (

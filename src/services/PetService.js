@@ -19,4 +19,10 @@ async function fetchPetsDuenoId(duenoId = getUserId()){
     return data;
 }
 
-export { fetchPet, fetchPetId, fetchPetsDuenoId };
+async function fetchChip(petId){
+    const response = await fetch(`${API_URL}/api/pets/chip/${petId}`);
+    const data = await response.json();
+    return data;
+}
+
+export { fetchPet, fetchPetId, fetchPetsDuenoId, fetchChip };

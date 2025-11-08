@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { API_URL } from "../../config/api";
 import { getUserId } from "../../services/UserService";
+import { useSavedData } from "../../context/SavedDataContext";
 
 export default function AddPets({ onPetAdded }) {
+
+  const { user } = useSavedData();
+
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({
-    dueno_id: getUserId(),
+    dueno_id: "",
     nombre: "",
     especie: "",
     raza: "",
@@ -19,6 +23,14 @@ export default function AddPets({ onPetAdded }) {
   });
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
+
+
+  useEffect(() => {
+    console.log("User no contexto:", user)
+    if(user && user.id){
+      setForm((prev) => ({...prev, dueno_id: user.id}))
+    }
+  }, [user]);
 
   // Atualiza campos do formulário
   const handleChange = (e) => {
@@ -37,36 +49,62 @@ export default function AddPets({ onPetAdded }) {
     setLoading(true);
 
     try {
-      const formData = new FormData();
-      for (const key in form) {
-        formData.append(key, form[key]);
+      if (!form || !form.dueno_id) {
+        throw new Error("O ID do usuário não foi carregado.");
       }
 
-      const response = await fetch(`${API_URL}/api/pets`, {
+      let uploadedFileUrl = null;
+
+      // 1️⃣ Se o usuário selecionou uma foto, envia pro endpoint de upload
+      if (form.foto_url instanceof File) {
+        const fileData = new FormData();
+        fileData.append("file", form.foto_url);
+
+        const uploadRes = await fetch(`${API_URL}/api/upload`, {
+          method: "POST",
+          body: fileData,
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error("Falha ao subir imagem");
+        }
+
+        const uploadData = await uploadRes.json();
+        uploadedFileUrl = uploadData.fileUrl; // retorna o nome/URL salvo no GridFS
+      }
+
+      // 2️⃣ Agora envia os dados do pet (com o link da imagem, se existir)
+      const petData = {
+        ...form,
+        foto_url: uploadedFileUrl || form.foto_url,
+      };
+
+      const petRes = await fetch(`${API_URL}/api/pets`, {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(petData),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) throw new Error(data.message || "Erro ao adicionar pet");
+      const data = await petRes.json();
+      if (!petRes.ok) throw new Error(data.message || "Erro ao adicionar pet");
 
       alert("Pet adicionado com sucesso!");
       setShowModal(false);
-      onPetAdded?.(data); // atualiza lista no componente pai
+      onPetAdded?.(data);
     } catch (err) {
-      console.error("Erro:", err);
-      alert("Falha ao adicionar pet: " + err.message);
+        console.error("Erro:", err);
+        alert("Falha ao adicionar pet: " + err.message);
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
   };
+
 
   return (
     <>
       {/* Card que abre o modal */}
       <article
-        className="mx-auto bg-[#f5f5dc]/50 w-full max-w-[250px] rounded-3xl h-[250px] p-5 flex justify-center items-center flex-col cursor-pointer hover:scale-105 transition-transform"
+        className="mx-auto bg-[#f5f5dc]/50 w-[256px] flex-shrink-0 rounded-3xl h-[250px] p-5 flex justify-center items-center flex-col cursor-pointer hover:scale-105 transition-transform"
         onClick={() => setShowModal(true)}
       >
         <span className="text-3xl font-bold text-[#22687b]">+</span>

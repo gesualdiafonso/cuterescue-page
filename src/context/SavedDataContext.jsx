@@ -11,29 +11,32 @@ export function SavedDataProvider({ children }) {
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
   const [location, setLocation] = useState(null);
+  const [alerts, setAlerts] = useState([]);
 
   useEffect(() => {
     async function initData() {
       const duenoId = AuthService.getUserId(); // pode vir de localStorage
-      const { user, details, pets, selectedPet, location } = await SavedDataService.loadAllData(duenoId);
+      const { user, details, pets, selectedPet, location, alerts } = await SavedDataService.loadAllData(duenoId);
       setUser(user);
       setPets(pets);
       setDetails(details);
       setSelectedPet(selectedPet);
       setLocation(location);
+      setAlerts(alerts);
     }
     initData();
   }, []);
 
   async function handleSelectPet(petId) {
-    const { pet, location } = await SavedDataService.selectPet(petId);
+    const { pet, location, alerts } = await SavedDataService.selectPet(petId);
     setSelectedPet(pet);
     setLocation(location);
+    setAlerts(alerts)
   }
 
   return (
     <SavedDataContext.Provider
-      value={{ user, details, pets, selectedPet, location, handleSelectPet }}
+      value={{ user, details, pets, selectedPet, location, alerts, handleSelectPet }}
     >
       {children}
     </SavedDataContext.Provider>

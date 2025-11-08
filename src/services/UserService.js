@@ -5,7 +5,6 @@ import AuthServices from "./AuthServices";
 //              USER SERVICES         //
 //-------------------------------------//
 
-let currentUserId = "95667d03c662aec9";
 
 // Fucnión para mudar el userId dinamicamente
 export function setUserId(id){
