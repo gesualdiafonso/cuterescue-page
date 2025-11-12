@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import SavedDataService from "../services/SavedDataServices";
 import AuthService from "../services/AuthServices";
+import { API_URL } from "../config/api";
 import { getUserId } from "../services/UserService";
 
 const SavedDataContext = createContext();
@@ -34,9 +35,55 @@ export function SavedDataProvider({ children }) {
     setAlerts(alerts)
   }
 
+  async function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch(`${API_URL}/api/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Falha no upload");
+
+      const newPhotoUrl = `${API_URL}${data.fileUrl}`;
+
+      // Atualiza local e globalmente
+      setLocalDetails(prev => ({ ...prev, profilePic: newPhotoUrl }));
+      setDetails(prev => ({ ...prev, profilePic: newPhotoUrl }));
+
+    } catch (err) {
+      console.error("❌ Erro ao subir imagem:", err);
+    }
+  }
+
+  // función global para actualizar la foto de perfil
+  function updatedProfilePic(newURL){
+    setDetails((prev) => {
+      const updated = { ...prev, profilePic: newURL };
+      localStorage.setItem("userDetails", JSON.stringify(updated));
+      return updated;
+    });
+  }
+
   return (
     <SavedDataContext.Provider
-      value={{ user, details, pets, selectedPet, location, alerts, handleSelectPet }}
+      value={{ 
+        user, 
+        details, 
+        setDetails, 
+        pets, 
+        selectedPet, 
+        location, 
+        alerts, 
+        handleSelectPet,
+        updatedProfilePic
+      }}
     >
       {children}
     </SavedDataContext.Provider>

@@ -5,7 +5,6 @@ export default function NavBarAdmin() {
   const links = [
     { name: "Informe", path: "/" },
     { name: "Informacion Pet", path: "/informe-pet" },
-    { name: "Documentación", path: "/documentaciones-pets" },
     { name: "Veterinarias 24hrs", path: "/veterinarias-24hrs" },
     { name: "Eventos", path: "/eventos-ba" },
   ];

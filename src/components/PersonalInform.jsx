@@ -42,7 +42,7 @@ export default function PersonalInform(){
             </div>
             <div className="flex justify-center items-center gap-5">
                 <div className="bg-gray-300 rounded-full w-16 h-16 text-center">
-                    <img src="#" alt="#" className="w-full object-cover h-full" />
+                    <img src={details?.profilePic || "#"} alt="#" className="w-full h-full object-cover" />
                 </div>
                 <div>
                     <h3 className="font-bold text-xl">{firstName}</h3>

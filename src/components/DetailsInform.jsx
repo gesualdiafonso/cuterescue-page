@@ -1,14 +1,47 @@
-import React from "react"; 
+import React, { useState } from "react"; 
+import { API_URL } from "../config/api";
 import { Link } from "react-router-dom";
 import { useSavedData } from "../context/SavedDataContext";
 import BtnEditProfile from "./ui/BtnEditProfile";
 
 export default function DetailsInform(){
-  const { user, details } = useSavedData();
+  const { user, details, setDetails, updatedProfilePic } = useSavedData();
+  const[localDetails, setLocalDetails] = useState(details)
 
   if (!user || !details) return <div>Loading...</div>;
 
-  const { email, status } = user;
+  const handleUpdate = (updatedData) => {
+    setLocalDetails(updatedData);
+    setDetails(updatedData)
+  };
+
+  async function handleImageUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch(`${API_URL}/api/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Falha no upload");
+
+      // Atualiza a foto local
+      const newPhotoUrl = `${API_URL}${data.fileUrl}`;
+      updatedProfilePic(newPhotoUrl);
+
+    } catch (err) {
+      console.error("❌ Erro ao subir imagem:", err);
+    }
+  }
+
+
+  const { email } = user;
   const { 
     fecha_nacimiento, 
     ubicacion, 
@@ -21,8 +54,21 @@ export default function DetailsInform(){
 
   return (
     <div className="flex gap-10 justify-center items-center">
-      <div className="bg-gray-200 w-72 h-80 rounded-2xl">
-        <img src="#" alt="#" className="w-full h-full" />
+      <div className="relative bg-gray-200 w-72 h-80 rounded-2xl overflow-hidden">
+        <img src={details?.profilePic || "#"} alt="#" className="w-full h-full object-cover" />
+        <label
+          htmlFor="profileUpload"
+          className="absolute bottom-0 left-0 right-0 bg-[#22687b]/80 text-white text-center py-2 cursor-pointer font-semibold hover:bg-[#1b5463]/90 transition"
+        >
+          Cambiar foto de perfil
+        </label>
+        <input
+          id="profileUpload"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageUpload}
+        />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -35,19 +81,9 @@ export default function DetailsInform(){
           <p><strong>Teléfono:</strong> {telefono}</p>
           <p><strong>Documento:</strong> {tipo_documento}: {documento}</p>
           <p><strong>Género:</strong> {genero}</p>
-          <p><strong>Plan:</strong> Premium 
-            <Link to="/planos" className="ml-3 px-5 bg-[#f7a82a] text-white font-light rounded-2xl">
-              Cambiar
-            </Link>
-          </p>
-          <p><strong>GPS Activo:</strong> gps  
-            <Link to="/gps-pets" className="ml-3 px-5 bg-[#22687b] text-white font-light rounded-2xl">
-              Acceder
-            </Link>
-          </p>
         </div>
         <div>
-          <BtnEditProfile />
+          <BtnEditProfile userId={user.id} details={localDetails} onUpdate={handleUpdate} />
         </div>
       </div>
     </div>
