@@ -31,7 +31,7 @@ export default function AddPets({ onPetAdded }) {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    if (name === "foto_url" && files?.[0]) {
+    if (name === "foto" && files?.[0]) {
       setForm({ ...form, foto: files[0] });
       setPreview(URL.createObjectURL(files[0]));
     } else {
@@ -124,7 +124,7 @@ export default function AddPets({ onPetAdded }) {
 
               <div>
                 <label className="block mb-1 text-sm text-white">Foto</label>
-                <input type="file" name="foto_url" accept="image/*" onChange={handleChange} className="w-full border border-[#fd9b08] p-2 bg-white" />
+                <input type="file" name="foto" accept="image/*" onChange={handleChange} className="w-full border border-[#fd9b08] p-2 bg-white" />
                 {preview && <img src={preview} className="mt-2 w-32 h-32 object-cover rounded-xl" />}
               </div>
 

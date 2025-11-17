@@ -36,7 +36,7 @@ export default function DetailsInform(){
       if (!res.ok) throw new Error(data.error || "Falha no upload");
 
       // Atualiza a foto local
-      const newPhotoUrl = `${API_URL}${data.fileUrl}`;
+      const newPhotoUrl = `${data.fileUrl}`;
       updatedProfilePic(newPhotoUrl);
 
       //actualiza en el banco

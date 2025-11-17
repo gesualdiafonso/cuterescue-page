@@ -58,7 +58,7 @@ export default function BtnEditProfile({ userId, details, onUpdate }) {
     const result = await res.json();
     if (!res.ok) throw new Error(result.error || "Falha no upload");
 
-    return `${API_URL}${result.fileUrl}`;
+    return `${result.fileUrl}`;
   }
 
   async function handleSubmit(e) {
