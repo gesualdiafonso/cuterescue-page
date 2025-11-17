@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import BtnViaje from "./ui/BtnViaje"
 import BtnEmergency from "./ui/BtnEmergency"
 import { fetchDetailsUserId } from "../services/UserService"
+import { API_URL } from "../config/api"
 
 export default function PersonalInform(){
     const [details, setDetails ] = useState(null);
@@ -42,7 +43,7 @@ export default function PersonalInform(){
             </div>
             <div className="flex justify-center items-center gap-5">
                 <div className="bg-gray-300 rounded-full w-16 h-16 text-center">
-                    <img src={details?.profilePic || "#"} alt="#" className="w-full h-full object-cover" />
+                    <img src={details.profilePic ? `${API_URL}${details.profilePic}` : `${API_URL}/public/images/default-pet.jpg`} alt="#" className="w-full h-full object-cover" />
                 </div>
                 <div>
                     <h3 className="font-bold text-xl">{firstName}</h3>

@@ -3,6 +3,8 @@ import { API_URL } from "../../config/api";
 
 export default function BtnEditProfile({ userId, details, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     nombre: "",
     telefono: "",
@@ -10,18 +12,20 @@ export default function BtnEditProfile({ userId, details, onUpdate }) {
     ubicacion: "",
     fecha_nacimiento: "",
   });
-  const [loading, setLoading] = useState(false);
 
-  // Atualiza o form quando details mudar (ex: quando os dados carregam)
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [preview, setPreview] = useState(details?.profilePic || "");
+
   useEffect(() => {
     if (details) {
       setFormData({
-        nombre: details?.nombre || "",
-        telefono: details?.telefono || "",
-        genero: details?.genero || "",
-        ubicacion: details?.ubicacion?.address || "",
-        fecha_nacimiento: details?.fecha_nacimiento || "",
+        nombre: details.nombre || "",
+        telefono: details.telefono || "",
+        genero: details.genero || "",
+        ubicacion: details.ubicacion?.address || "",
+        fecha_nacimiento: details.fecha_nacimiento || "",
       });
+      setPreview(details.profilePic || "");
     }
   }, [details]);
 
@@ -30,34 +34,74 @@ export default function BtnEditProfile({ userId, details, onUpdate }) {
     setFormData(prev => ({ ...prev, [name]: value }));
   }
 
+  function handleImageSelect(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  }
+
+  async function uploadImage() {
+    if (!selectedImage) return null;
+
+    const fd = new FormData();
+    fd.append("file", selectedImage);
+    fd.append("userId", userId);
+    fd.append("name", selectedImage.name);
+
+    const res = await fetch(`${API_URL}/api/uploads`, {
+      method: "POST",
+      body: fd,
+    });
+
+    const result = await res.json();
+    if (!res.ok) throw new Error(result.error || "Falha no upload");
+
+    return `${API_URL}${result.fileUrl}`;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
+
     try {
+      let newPhotoUrl = null;
+
+      // 1) Faz upload da imagem, se houver
+      if (selectedImage) {
+        newPhotoUrl = await uploadImage();
+      }
+
+      // 2) Envia tudo para o back
+      const payload = {
+        ...formData,
+        profilePic: newPhotoUrl || details.profilePic,
+      };
+
       const response = await fetch(`${API_URL}/api/user/${userId}/details`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(payload),
       });
 
-      if (!response.ok) throw new Error("Erro ao atualizar usuário");
+      if (!response.ok) throw new Error("Erro ao atualizar dados");
 
       const updated = await response.json();
       onUpdate(updated);
       setIsOpen(false);
     } catch (error) {
-      console.error("❌ Falha na atualização:", error);
+      console.error("❌ Erro geral:", error);
     } finally {
       setLoading(false);
     }
   }
 
-  if (!details) return null; // <-- evita render antes do carregamento
+  if (!details) return null;
 
   return (
     <>
       <button
-        type="button"
         onClick={() => setIsOpen(true)}
         className="bg-[#22687b] rounded-xl py-2 px-8 font-bold text-white 
                    hover:bg-transparent hover:border hover:border-[#22687b] 
@@ -67,8 +111,9 @@ export default function BtnEditProfile({ userId, details, onUpdate }) {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 bg-black/50 bg-opacity-50 flex justify-center items-center z-50">
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
           <div className="bg-white rounded-2xl p-8 w-96 relative">
+
             <button
               onClick={() => setIsOpen(false)}
               className="absolute top-3 right-4 text-gray-500 hover:text-black text-xl"
@@ -80,55 +125,52 @@ export default function BtnEditProfile({ userId, details, onUpdate }) {
               Editar Perfil
             </h3>
 
+            {/* Pré-visualização da imagem */}
+            <div className="w-full flex justify-center mb-4">
+              <label className="cursor-pointer">
+                <img
+                  src={preview}
+                  alt="preview"
+                  className="w-32 h-32 object-cover rounded-full border"
+                />
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageSelect}
+                />
+              </label>
+            </div>
+
+            {/* Formulário */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-              <input
-                name="nombre"
-                value={formData.nombre}
-                onChange={handleChange}
-                placeholder="Nombre"
-                className="border rounded-lg p-2"
-                required
-              />
-              <input
-                name="telefono"
-                value={formData.telefono}
-                onChange={handleChange}
-                placeholder="Teléfono"
-                className="border rounded-lg p-2"
-              />
-              <input
-                name="ubicacion"
-                value={formData.ubicacion}
-                onChange={handleChange}
-                placeholder="Ubicación"
-                className="border rounded-lg p-2"
-              />
-              <input
-                type="date"
-                name="fecha_nacimiento"
-                value={formData.fecha_nacimiento}
-                onChange={handleChange}
-                className="border rounded-lg p-2"
-              />
-              <select
-                name="genero"
-                value={formData.genero}
-                onChange={handleChange}
-                className="border rounded-lg p-2"
-              >
+
+              <input name="nombre" value={formData.nombre}
+                onChange={handleChange} placeholder="Nombre" className="border p-2 rounded-lg" />
+
+              <input name="telefono" value={formData.telefono}
+                onChange={handleChange} placeholder="Teléfono" className="border p-2 rounded-lg" />
+
+              <input name="ubicacion" value={formData.ubicacion}
+                onChange={handleChange} placeholder="Ubicación" className="border p-2 rounded-lg" />
+
+              <input type="date" name="fecha_nacimiento"
+                value={formData.fecha_nacimiento} onChange={handleChange}
+                className="border p-2 rounded-lg" />
+
+              <select name="genero" value={formData.genero}
+                onChange={handleChange} className="border p-2 rounded-lg">
                 <option value="">Seleccionar género</option>
                 <option value="Masculino">Masculino</option>
                 <option value="Femenino">Femenino</option>
                 <option value="Otro">Otro</option>
               </select>
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-[#22687b] text-white font-bold py-2 rounded-xl hover:bg-[#1b5463] transition"
-              >
+              <button type="submit" disabled={loading}
+                className="bg-[#22687b] text-white font-bold py-2 rounded-xl hover:bg-[#1b5463] transition">
                 {loading ? "Guardando..." : "Guardar cambios"}
               </button>
+
             </form>
           </div>
         </div>

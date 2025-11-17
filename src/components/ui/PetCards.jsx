@@ -1,5 +1,6 @@
 import React from "react";
 import AddPets from "../modals/AddPets";
+import { API_URL } from "../../config/api";
 
 export default function PetCards({ pets = [], selectedPet, setSelectedPet, onPetAdded }) {
   return (
@@ -21,7 +22,7 @@ export default function PetCards({ pets = [], selectedPet, setSelectedPet, onPet
               >
                 <div className="w-full h-52 mb-5 bg-gray-50 rounded-xl overflow-hidden">
                   <img
-                    src={pet.foto_url || "#"}
+                    src={pet.foto_url ? `${API_URL}${pet.foto_url}` : `${API_URL}/public/images/default-pet.jpg`}
                     alt={nombre}
                     className="w-full h-full object-cover"
                   />

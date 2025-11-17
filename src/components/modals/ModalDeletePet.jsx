@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
-export default function ModalDeletePet({ pet, onClose }){
+export default function ModalDeletePet({ pet, onClose, onDelete }) {
     const [confirmText, setConfirmText] = useState("");
 
     const handleDelete = () => {
         // Lógica para borrar el pet
         console.log(`Pet ${pet.nombre} borrado.`);
+        onDelete(pet.id);
         onClose();
     };
     return(

@@ -15,15 +15,19 @@ export default function DetailsInform(){
     setDetails(updatedData)
   };
 
+  const userId = details.userId;
+
   async function handleImageUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
     formData.append("file", file);
+    formData.append("userId", userId);
+    formData.append("name", file.name);
 
     try {
-      const res = await fetch(`${API_URL}/api/upload`, {
+      const res = await fetch(`${API_URL}/api/uploads`, {
         method: "POST",
         body: formData,
       });
@@ -34,6 +38,19 @@ export default function DetailsInform(){
       // Atualiza a foto local
       const newPhotoUrl = `${API_URL}${data.fileUrl}`;
       updatedProfilePic(newPhotoUrl);
+
+      //actualiza en el banco
+      await fetch(`${API_URL}/api/user/${userId}/details`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ profilePic: newPhotoUrl }),
+      });
+
+      // Sincroniza o frontend corretamente
+      setDetails(prev => ({ ...prev, profilePic: newPhotoUrl }));
+      setLocalDetails(prev => ({ ...prev, profilePic: newPhotoUrl }));
+
+
 
     } catch (err) {
       console.error("❌ Erro ao subir imagem:", err);
@@ -55,7 +72,7 @@ export default function DetailsInform(){
   return (
     <div className="flex gap-10 justify-center items-center">
       <div className="relative bg-gray-200 w-72 h-80 rounded-2xl overflow-hidden">
-        <img src={details?.profilePic || "#"} alt="#" className="w-full h-full object-cover" />
+        <img src={details.profilePic ? `${API_URL}${details.profilePic}` : `${API_URL}/public/images/default-pet.jpg`} alt="#" className="w-full h-full object-cover" />
         <label
           htmlFor="profileUpload"
           className="absolute bottom-0 left-0 right-0 bg-[#22687b]/80 text-white text-center py-2 cursor-pointer font-semibold hover:bg-[#1b5463]/90 transition"
