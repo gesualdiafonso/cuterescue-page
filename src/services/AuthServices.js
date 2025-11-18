@@ -1,6 +1,27 @@
 import { API_URL } from "../config/api";
 import axios from "axios"
 
+const api = axios.create({
+    baseURL: API_URL,
+});
+
+// Interceptador para agregar el token en las solicitudes automaticamente
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem("token");
+        console.log("Token no interceptor:", token);
+        if (token){
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log("Header Authorization adicionado:", config.headers.Authorization);
+        } else{
+            console.warn("Nenhum token encontrado no localStorage.");
+        }
+        return config;
+    },
+    (error) => { return Promise.reject(error); }
+);
+
+
 class AuthService{
     constructor(){
         this.tokenKey = "token";
@@ -38,13 +59,12 @@ class AuthService{
                 email,
                 password
             });
-
             return {
                 success: true,
                 user: response.data
             }
         } catch (error) {
-            console.logconsole.error("Erro ao registrar usuário:", error.response?.data || error.message);
+            console.error("Erro ao registrar usuário:", error.response?.data || error.message); // Corrigido: removido "console.log"
             return { 
                 success: false, 
                 message: error.response?.data?.message || "Erro ao registrar" 
@@ -59,7 +79,7 @@ class AuthService{
     }
 
     // Pegar el token
-    getTonken(){
+    getToken(){
         return localStorage.getItem(this.tokenKey);
     }
 
@@ -70,7 +90,11 @@ class AuthService{
 
     // Verifica se está logando
     isAuthenticated(){
-        return !!this.getTonken();
+        return !!this.getToken();
+    }
+
+    getApiInstance(){
+        return api;
     }
 }
 

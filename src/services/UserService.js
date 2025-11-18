@@ -1,6 +1,8 @@
 import { API_URL } from "../config/api";
 import AuthServices from "./AuthServices";
 
+const api = AuthServices.getApiInstance();
+
 //-------------------------------------//
 //              USER SERVICES         //
 //-------------------------------------//
@@ -27,8 +29,8 @@ export function getUserId(){
 }*/
 
 async function fetchUserId(userId = getUserId()){
-    const response = await fetch(`${API_URL}/api/user/${userId}`);
-    const data = await response.json();
+    const response = await api.get(`${API_URL}/api/user/${userId}`);
+    const data = response.data;
     return data;
 }
 
@@ -39,8 +41,8 @@ async function fetchUserId(userId = getUserId()){
 }*/
 
 async function fetchDetailsUserId(userId = getUserId()){
-    const response = await fetch(`${API_URL}/api/user/${userId}/details`);
-    const data = await response.json();
+    const response = await api.get(`${API_URL}/api/user/${userId}/details`);
+    const data = response.data;
     return data;
 }
 

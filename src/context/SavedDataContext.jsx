@@ -6,28 +6,51 @@ import { getUserId } from "../services/UserService";
 
 const SavedDataContext = createContext();
 
+const api = AuthService.getApiInstance();
+
 export function SavedDataProvider({ children }) {
   const [user, setUser] = useState(null);
   const [details, setDetails] = useState(null);
   const [pets, setPets] = useState([]);
   const [selectedPet, setSelectedPet] = useState(null);
+  const [localDetails, setLocalDetails] = useState(null);
   const [location, setLocation] = useState(null);
   const [alerts, setAlerts] = useState([]);
+  const [isDataLoaded, setIsDataLoaded] = useState(false); // Novo estado para controlar carregamento
 
+
+  // Dados iniciais
   useEffect(() => {
+    if (!AuthService.isAuthenticated() || isDataLoaded) {
+      console.log("Usuário não autenticado ou dados já carregados. Pulando.");
+      return;
+    }
     async function initData() {
-      const duenoId = AuthService.getUserId(); // pode vir de localStorage
-      const { user, details, pets, selectedPet, location, alerts } = await SavedDataService.loadAllData(duenoId);
-      setUser(user);
-      setPets(pets);
-      setDetails(details);
-      setSelectedPet(selectedPet);
-      setLocation(location);
-      setAlerts(alerts);
+      const duenoId = AuthService.getUserId();
+      if (!duenoId) {
+        console.error("UserId não encontrado.");
+        return;
+      }
+      try {
+        const { user, details, pets, selectedPet, location, alerts } = await SavedDataService.loadAllData(duenoId);
+        setUser(user);
+        setPets(pets);
+        setDetails(details);
+        setSelectedPet(selectedPet);
+        setLocation(location);
+        setAlerts(alerts);
+        setIsDataLoaded(true); // Marca como carregado
+      } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+      }
     }
     initData();
-  }, []);
+  }, [isDataLoaded]);
 
+  const reloadData = () => {
+    setIsDataLoaded(false); // Reseta para forçar recarregamento
+  };
+  
   async function handleSelectPet(petId) {
     const { pet, location, alerts } = await SavedDataService.selectPet(petId);
     setSelectedPet(pet);
@@ -35,32 +58,24 @@ export function SavedDataProvider({ children }) {
     setAlerts(alerts)
   }
 
-  async function handleImageUpload(e) {
+
+ async function handleImageUpload(e) {
     const file = e.target.files[0];
     if (!file) return;
-
     const formData = new FormData();
     formData.append("file", file);
-
     try {
-      const res = await fetch(`${API_URL}/api/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Falha no upload");
-
+      // Corrigido: use api.post (Axios trata status automaticamente)
+      const response = await api.post(`${API_URL}/api/upload`, formData);
+      const data = response.data;
       const newPhotoUrl = `${API_URL}${data.fileUrl}`;
-
-      // Atualiza local e globalmente
-      setLocalDetails(prev => ({ ...prev, profilePic: newPhotoUrl }));
+      // Atualiza apenas no estado (remova setLocalDetails se não usado)
       setDetails(prev => ({ ...prev, profilePic: newPhotoUrl }));
-
     } catch (err) {
-      console.error("❌ Erro ao subir imagem:", err);
+      console.error("❌ Erro ao subir imagem:", err.response?.data || err.message);
     }
   }
+
 
   // función global para actualizar la foto de perfil
   function updatedProfilePic(newURL){
@@ -82,7 +97,8 @@ export function SavedDataProvider({ children }) {
         location, 
         alerts, 
         handleSelectPet,
-        updatedProfilePic
+        updatedProfilePic,
+        reloadData
       }}
     >
       {children}

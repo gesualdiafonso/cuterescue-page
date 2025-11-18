@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import ModalEditPet from "../modals/ModalEditPet.jsx";
 import ModalDeletePet from "../modals/ModalDeletePet";
 import { API_URL } from "../../config/api.js";
+import AuthServices from "../../services/AuthServices.js";
+
+const api = AuthServices.getApiInstance();
 
 export default function EditPetForm({ selectedPet, onUpdate }) {  // Adicione onUpdate como prop opcional
-  if (!selectedPet) return <div className="felx justify-center items-center"><h2 className="text-3xl font-black text-center my-10">Todavía el Pet no ha sido agregado</h2></div>;
+  if (!selectedPet) return <div className="flex justify-center items-center"><h2 className="text-3xl font-black text-center my-10">Todavía el Pet no ha sido agregado</h2></div>;
   
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -14,37 +17,32 @@ export default function EditPetForm({ selectedPet, onUpdate }) {  // Adicione on
   // -------------------- API: PUT --------------------
   async function handleUpdatePet(updatedPet) {
     try {
-      const res = await fetch(`${API_URL}/api/pets/${selectedPet.id}`, {  // Use selectedPet.id para a URL
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(updatedPet),  // Agora updatedPet é limpo (sem _id)
-      });
-      if (!res.ok) throw new Error("Erro ao atualizar pet");
-      
-      console.log("Pet atualizado com sucesso");
+      const response = await api.put(`${API_URL}/api/pets/${selectedPet.id}`, updatedPet);
+      console.log("Pet atualizado com sucesso:", response.data);
       
       // Recarregar dados após salvar (se onUpdate for passado)
       if (onUpdate) {
         onUpdate();  // Chame uma função para recarregar o pet do backend
       }
     } catch (err) {
-      console.error("Erro no PUT:", err);
+      console.error("Erro no PUT:", err.response?.data || err.message);
+      alert("Erro ao atualizar pet: " + (err.response?.data?.message || err.message));
     }
   }
 
   // -------------------- API: DELETE --------------------
   async function handleDeletePet(id) {
     try {
-      const res = await fetch(`${API_URL}/api/pets/${id}`, {
-        method: "DELETE"
-      });
-      if (!res.ok) throw new Error("Erro ao deletar pet");
-      console.log("Pet deletado com sucesso");
-      // Adicione lógica para remover do contexto/UI se necessário
+      const response = await api.delete(`${API_URL}/api/pets/${id}`);
+      console.log("Pet deletado com sucesso:", response.data);
+      
+      // Recarregar dados após deletar (se onUpdate for passado)
+      if (onUpdate) {
+        onUpdate();  // Chame para atualizar a lista de pets
+      }
     } catch (err) {
-      console.error("Erro no DELETE:", err);
+      console.error("Erro no DELETE:", err.response?.data || err.message);
+      alert("Erro ao deletar pet: " + (err.response?.data?.message || err.message));
     }
   }
 
@@ -92,11 +90,8 @@ export default function EditPetForm({ selectedPet, onUpdate }) {  // Adicione on
           <button type="button" onClick={() => setIsEditModalOpen(true)} className="w-full bg-white border border-[#22687c] font-black py-2 rounded-xl">
             Editar informes
           </button>
-          <button type="button" onClick={() => setIsDeleteModalOpen(true)} className="w-full bg-[#22687c] text-white font-black py-2 rounded-xl">  {/* Corrigido: type="button" */}
+          <button type="button" onClick={() => setIsDeleteModalOpen(true)} className="w-full bg-[#22687c] text-white font-black py-2 rounded-xl">
             Borrar Pet
-          </button>
-          <button type="button" className="w-full bg-[#fbc68f] text-white font-black py-2 rounded-xl">
-            Informe Chip
           </button>
         </div>
         {/* Modal de edição */}

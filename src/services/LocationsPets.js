@@ -1,21 +1,28 @@
 import { API_URL } from "../config/api";
 import { fetchPetsDuenoId } from "./PetService";
 import { getUserId } from "./UserService";
+import AuthServices from "./AuthServices";
+
+const api = AuthServices.getApiInstance();
 
 //-------------------------------------//
 //           LOCATIONS PETS SERVICES   //
 //-------------------------------------//
 async function fetchLocationsPets(pet_id){
     try {
-        const response = await fetch(`${API_URL}/api/locations/pets/${pet_id}`);
-        if (!response.ok) {
-            if (response.status === 404) return null; // Não há localização, retorne null
-            throw new Error(`Erro: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
+        console.log("Fazendo uma request para:", `${API_URL}/api/locations/pets/${pet_id}`);
+        const response = await api.get(`${API_URL}/api/locations/pets/${pet_id}`);
+        console.log("Resposta recebida:", response.status, response.data);
+        return response.data;
     } catch (err) {
         console.error("Erro ao buscar localização:", err);
+        if(err.response?.status === 404){
+            console.warn("Nenhuma localização encontrada para o pet com ID:", pet_id);
+            return null;
+        }
+        if(err.response?.status === 401){
+            console.warn("Não autorizado. Verifique o token de autenticação.");
+        }
         return null;
     }
 }
@@ -38,9 +45,8 @@ async function loadUserPetLocation(duenoId, selectedPetId = null){
 //----------------------------//
  async function fecthAlertsByPet(pet_id){
     try{
-        const response = await fetch(`${API_URL}/api/alerts/pet/${pet_id}`);
-        if(!response.ok) throw new Error("Error al buscar alertas")
-        const data = await response.json();
+        const response = await api.get(`${API_URL}/api/alerts/pet/${pet_id}`);
+        const data = response.data;
         return data;
     } catch (err){
         console.log("Error al cargar alertas", err)

@@ -3,6 +3,7 @@ import { fetchDetailsUserId } from "./UserService";
 import { fetchPetsDuenoId } from "./PetService";
 import { fetchLocationsPets, fecthAlertsByPet } from "./LocationsPets";
 
+
 class SavedDataService {
   constructor() {
     this.user = null;

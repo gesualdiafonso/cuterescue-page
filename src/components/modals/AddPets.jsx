@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../config/api";
 import { useSavedData } from "../../context/SavedDataContext";
+import AuthServices from "../../services/AuthServices";
+
+const api = AuthServices.getApiInstance();
 
 export default function AddPets({ onPetAdded }) {
   const { user } = useSavedData();
@@ -17,7 +20,7 @@ export default function AddPets({ onPetAdded }) {
     color: "",
     estado_salud: "",
     home_location: "",
-    foto_url: null,
+    foto: null, // Corrigido: use "foto" para consistência com o backend
   });
   const [loading, setLoading] = useState(false);
   const [preview, setPreview] = useState(null);
@@ -40,43 +43,34 @@ export default function AddPets({ onPetAdded }) {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-  try {
-    if (!form.dueno_id) throw new Error("User ID não carregado.");
+    try {
+      if (!form.dueno_id) throw new Error("User ID não carregado.");
 
-    const data = new FormData();
-    Object.entries(form).forEach(([key, value]) => {
-      data.append(key, value);
-    });
+      const data = new FormData();
+      Object.entries(form).forEach(([key, value]) => {
+        if (value !== null && value !== "") { // Evita enviar valores vazios/null
+          data.append(key, value);
+        }
+      });
 
-    // Se tiver foto, envia o File
-    // Se NÃO tiver, envia null e o back ignora
-    if (form.foto_url instanceof File) {
-      data.append("foto", form.foto_url); // <-- nome esperado pelo multer
+      // Axios envia FormData automaticamente com headers corretos
+      const response = await api.post(`${API_URL}/api/pets`, data);
+
+      console.log("Pet adicionado com sucesso:", response.data);
+      alert("Pet adicionado com sucesso!");
+      setShowModal(false);
+      onPetAdded?.(response.data); // Passe os dados do pet criado
+      
+    } catch (err) {
+      console.error("Erro ao adicionar pet:", err.response?.data || err.message);
+      alert("Falha ao adicionar pet: " + (err.response?.data?.message || err.message));
+    } finally {
+      setLoading(false);
     }
-
-    const res = await fetch(`${API_URL}/api/pets`, {
-      method: "POST",
-      body: data,
-    });
-
-    const result = await res.json();
-
-    if (!res.ok) throw new Error(result.error || "Erro ao criar pet");
-
-    alert("Pet adicionado com sucesso!");
-    setShowModal(false);
-    onPetAdded?.(result);
-    
-  } catch (err) {
-    console.error(err);
-    alert("Falha ao adicionar pet: " + err.message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <>

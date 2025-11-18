@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthServices";
 import SavedDataService from "../services/SavedDataServices";
 import { useState } from "react";
+import { useSavedData } from "../context/SavedDataContext";
 
 
 function Login() {
@@ -9,6 +10,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { reloadData } = useSavedData;
   const navigate = useNavigate();
 
   async function handleSubmit(e){
@@ -24,7 +26,8 @@ function Login() {
     // Carga datos del usuario logado
     await SavedDataService.loadAllData(user.id);
 
-    navigate("/");
+    reloadData();
+    navigate("/dashboard");
 
   }
 

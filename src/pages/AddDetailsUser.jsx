@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
+import AuthServices from "../services/AuthServices"; 
+import axios from "axios";
+
+const api = AuthServices.getApiInstance(); // Instância do Axios com interceptor para token JWT
 
 function AddDetailsUser() {
   const [form, setForm] = useState({
@@ -24,23 +28,13 @@ function AddDetailsUser() {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API_URL}/api/user/${userId}/details`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || "Error al guardar detalles");
-        return;
-      }
-
-      navigate("/");
+     
+      const response = await axios.post(`${API_URL}/api/user/${userId}/details`, form);
+      console.log("Detalhes salvos com sucesso:", response.data);
+      navigate("/login");
     } catch (err) {
-      console.error("Error:", err);
-      setError("Error al conectar con el servidor");
+      console.error("Erro ao salvar detalhes:", err.response?.data || err.message);
+      setError(err.response?.data?.error || "Erro ao conectar com o servidor");
     }
   };
 
