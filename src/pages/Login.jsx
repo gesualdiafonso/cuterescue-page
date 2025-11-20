@@ -12,7 +12,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login } = useAuth();
-  const { reloadData } = useSavedData;
+  //const { reloadData } = useSavedData;
   const navigate = useNavigate();
 
   async function handleSubmit(e){
@@ -27,7 +27,7 @@ function Login() {
 
     // Carregar dados do usuário após login
     await SavedDataService.loadAllData(user.id);
-    reloadData();
+    //reloadData();
     navigate("/");
 
   }
