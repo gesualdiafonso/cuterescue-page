@@ -52,7 +52,7 @@ class SavedDataService {
 
 
       // si no haver pets, devuelve sin buscar localización/alerts
-      if (!pets || !pets.length === 0) { 
+      if (!pets || pets.length === 0) { 
         this.user, 
         this.details, 
         this.pets = [], 

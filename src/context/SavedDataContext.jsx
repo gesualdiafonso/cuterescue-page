@@ -26,7 +26,7 @@ export function SavedDataProvider({ children }) {
   useEffect(() => {
     if (loading) return;
     // console.log("SavedDataContext - isAuthenticated:", isAuthenticated, "userId:", userId, "loaded:", loaded);
-    if (!isAuthenticated) return;
+    if (!isAuthenticated || !userId) return;
 
     // intenta user userId del auth, si no haber, intenta cargar 
     if (loaded) return;
