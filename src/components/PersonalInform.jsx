@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import BtnViaje from "./ui/BtnViaje"
+import BtnSimulacion from "./ui/BtnSimulacion"
 import BtnEmergency from "./ui/BtnEmergency"
 import { fetchDetailsUserId } from "../services/UserService"
 import { API_URL } from "../config/api"
@@ -37,7 +37,7 @@ export default function PersonalInform(){
             <div className="flex flex-col gap-4 px-5 mb-5">
                 <h2 className="font-bold text-8xl">{nombre}</h2>
                 <div className="flex gap-5">
-                   <BtnViaje/>
+                   <BtnSimulacion/>
                    <BtnEmergency/>
                 </div>
             </div>
