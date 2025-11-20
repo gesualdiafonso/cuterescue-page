@@ -1,54 +1,33 @@
 import { API_URL } from "../config/api";
 import axios from "axios"
-
-const api = axios.create({
-    baseURL: API_URL,
-});
-
-// Interceptador para agregar el token en las solicitudes automaticamente
-api.interceptors.request.use(
-    (config) => {
-        const token = localStorage.getItem("token");
-        console.log("Token no interceptor:", token);
-        if (token){
-            config.headers.Authorization = `Bearer ${token}`;
-            console.log("Header Authorization adicionado:", config.headers.Authorization);
-        } else{
-            console.warn("Nenhum token encontrado no localStorage.");
-        }
-        return config;
-    },
-    (error) => { return Promise.reject(error); }
-);
-
+import api, { setAuthToken } from "./api";
 
 class AuthService{
+    tokenKey = "token";
+    userIdKey = "userId";
+
     constructor(){
-        this.tokenKey = "token";
-        this.userIdKey = "userId";
+        // Inicializa o serviço de API com interceptadores
+        const token = localStorage.getItem(this.tokenKey);
+        if(token) setAuthToken(token);
     }
 
     // Login
     async login(email, password){
-        try{
-            const response = await axios.post(`${API_URL}/api/auth/login`, {
-                email,
-                password,
-            });
-
+        try {
+            const response = await api.post(`/api/auth/login`, { email, password });
             const { token, user } = response.data;
 
-            // Salva no LocalStorage
             localStorage.setItem(this.tokenKey, token);
             localStorage.setItem(this.userIdKey, user.id);
+            setAuthToken(token);
 
-            return{ success: true, user };
-        } catch(error){
-            console.error("Erro al realizar login: ", error.response?.data || error.message);
+            return { success: true, user };
+        } catch (err) {
             return {
                 success: false,
-                message: error.response?.data?.message || "Error de login"
-            }
+                message: err.response?.data?.message || "Erro ao realizar login"
+            };
         }
     }
 
@@ -72,10 +51,10 @@ class AuthService{
         }
     }
 
-    // Logout
-    logout(){
+    logout() {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userIdKey);
+        setAuthToken(null);
     }
 
     // Pegar el token

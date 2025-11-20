@@ -43,7 +43,7 @@ export default function PersonalInform(){
             </div>
             <div className="flex justify-center items-center gap-5">
                 <div className="bg-gray-300 rounded-full w-16 h-16 text-center">
-                    <img src={details.profilePic ? `${API_URL}${details.profilePic}` : `${API_URL}/public/images/default-pet.jpg`} alt="#" className="w-full h-full object-cover" />
+                    <img src={details.profilePic ? `${API_URL}${details.profilePic}` : `${API_URL}/public/images/default-pet.jpg`} alt="#" className="w-full h-full object-cover rounded-full" />
                 </div>
                 <div>
                     <h3 className="font-bold text-xl">{firstName}</h3>

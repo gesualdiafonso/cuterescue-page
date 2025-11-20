@@ -3,6 +3,7 @@ import AuthService from "../services/AuthServices";
 import SavedDataService from "../services/SavedDataServices";
 import { useState } from "react";
 import { useSavedData } from "../context/SavedDataContext";
+import { useAuth } from "../context/AuthContext";
 
 
 function Login() {
@@ -10,24 +11,24 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useAuth();
   const { reloadData } = useSavedData;
   const navigate = useNavigate();
 
   async function handleSubmit(e){
     e.preventDefault();
 
-    const { sucess, user, message } = await AuthService.login(email, password);
+    const { success, user, message } = await login(email, password);
 
-    if(!sucess){
+    if(!success){
       setError(message);
       return;
     }
 
-    // Carga datos del usuario logado
+    // Carregar dados do usuário após login
     await SavedDataService.loadAllData(user.id);
-
     reloadData();
-    navigate("/dashboard");
+    navigate("/");
 
   }
 

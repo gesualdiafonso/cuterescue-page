@@ -2,7 +2,6 @@ import Dashboard from "../pages/Dashboard";
 import ProtectedRout from "../components/ProtectedRoute";
 import Register from "../pages/Register"
 import Login from "../pages/Login"
-import Formulario from "../pages/Formulario"
 import Eventos from "../pages/Eventos";
 import Veterinaria from "../pages/Veterinarias";
 import InformePet from "../pages/InformePet";
@@ -34,15 +33,6 @@ const routes = [
         path: "/add-detalles",
         element: <AddDetailsUser />,
         title: "Agregar informaciones personales",
-    },
-    {
-        path: "/formulario",
-        element: (
-            <ProtectedRout>
-                <Formulario/>
-            </ProtectedRout>
-        ),
-        title: "Cute Rescue, Autenticación login"
     },
     {
         path: "/veterinarias-24hrs",

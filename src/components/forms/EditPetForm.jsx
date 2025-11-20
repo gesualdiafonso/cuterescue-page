@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import ModalEditPet from "../modals/ModalEditPet.jsx";
 import ModalDeletePet from "../modals/ModalDeletePet";
 import { API_URL } from "../../config/api.js";
-import AuthServices from "../../services/AuthServices.js";
-
-const api = AuthServices.getApiInstance();
+import api from "../../services/api.js";
 
 export default function EditPetForm({ selectedPet, onUpdate }) {  // Adicione onUpdate como prop opcional
   if (!selectedPet) return <div className="flex justify-center items-center"><h2 className="text-3xl font-black text-center my-10">Todavía el Pet no ha sido agregado</h2></div>;
@@ -17,7 +15,7 @@ export default function EditPetForm({ selectedPet, onUpdate }) {  // Adicione on
   // -------------------- API: PUT --------------------
   async function handleUpdatePet(updatedPet) {
     try {
-      const response = await api.put(`${API_URL}/api/pets/${selectedPet.id}`, updatedPet);
+      const response = await api.put(`/api/pets/${selectedPet.id}`, updatedPet);
       console.log("Pet atualizado com sucesso:", response.data);
       
       // Recarregar dados após salvar (se onUpdate for passado)
@@ -33,7 +31,7 @@ export default function EditPetForm({ selectedPet, onUpdate }) {  // Adicione on
   // -------------------- API: DELETE --------------------
   async function handleDeletePet(id) {
     try {
-      const response = await api.delete(`${API_URL}/api/pets/${id}`);
+      const response = await api.delete(`/api/pets/${id}`);
       console.log("Pet deletado com sucesso:", response.data);
       
       // Recarregar dados após deletar (se onUpdate for passado)

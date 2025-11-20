@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { API_URL } from "../../config/api";
-import AuthServices from "../../services/AuthServices";
-
-const api = AuthServices.getApiInstance();
+import api from "../../services/api";
 
 export default function BtnEditProfile({ userId, details, onUpdate }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,12 +51,9 @@ export default function BtnEditProfile({ userId, details, onUpdate }) {
     fd.append("userId", userId);
     fd.append("name", selectedImage.name);
 
-    const res = await api.post(`${API_URL}/api/uploads`, fd);
+    const res = await api.post(`/api/uploads`, fd);
 
-    const result = await res.data;
-    if (!res.ok) throw new Error(result.error || "Falha no upload");
-
-    return `${result.fileUrl}`;
+    return res.data.fileUrl;
   }
 
   async function handleSubmit(e) {
@@ -79,15 +74,13 @@ export default function BtnEditProfile({ userId, details, onUpdate }) {
         profilePic: newPhotoUrl || details.profilePic,
       };
 
-      const response = await api.put(`${API_URL}/api/user/${userId}/details`, payload);
+      const response = await api.put(`/api/user/${userId}/details`, payload);
 
-      if (!response.ok) throw new Error("Erro ao atualizar dados");
-
-      const updated = await response.data;
+      const updated = response.data;
       onUpdate(updated);
       setIsOpen(false);
     } catch (error) {
-      console.error("❌ Erro geral:", error);
+      console.error("❌ Erro geral:", error.response?.data || error);
     } finally {
       setLoading(false);
     }

@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_URL } from "../config/api";
-import AuthServices from "../services/AuthServices"; 
 import axios from "axios";
-
-const api = AuthServices.getApiInstance(); // Instância do Axios com interceptor para token JWT
+import api from "../services/api";
 
 function AddDetailsUser() {
   const [form, setForm] = useState({

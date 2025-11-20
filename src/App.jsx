@@ -5,13 +5,15 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Layout from './components/Layout';
 
+
 function App() {
   return (
-    <SavedDataProvider>
-      <Header />
-      <Layout />
-      <Footer />
-    </SavedDataProvider>
+      <>
+        <Header />
+        <Layout />
+        <Footer />
+      </>  
+  
   );
 }
 

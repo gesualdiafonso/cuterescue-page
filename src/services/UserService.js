@@ -1,7 +1,6 @@
 import { API_URL } from "../config/api";
 import AuthServices from "./AuthServices";
-
-const api = AuthServices.getApiInstance();
+import api from "./api";
 
 //-------------------------------------//
 //              USER SERVICES         //
@@ -15,33 +14,29 @@ export function setUserId(id){
 
 // Pegar el userId actual
 export function getUserId(){
-    return AuthServices.getUserId();
+    // hagamos un AuthServices
+    if (AuthServices && typeof AuthServices.getUserId === "function"){
+        const id = AuthServices.getUserId();
+        if (id) return id;
+    }
+
+    //fallback al localStorage
+    return localStorage.getItem("userId");
 }
 
 // -----------------------------------//
 //              API CALLS              //
 //-------------------------------------//
 
-/*async function fetchUser(){
-    const response = await fetch(`${API_URL}/api/user`);
-    const data = await response.json();
-    return data;
-}*/
-
 async function fetchUserId(userId = getUserId()){
-    const response = await api.get(`${API_URL}/api/user/${userId}`);
+    const response = await api.get(`/api/user/${userId}`);
     const data = response.data;
     return data;
 }
 
-/*async function fetchDetailsUser(){
-    const response = await fetch(`${API_URL}/api/user/details`);
-    const data = await response.json();
-    return data;
-}*/
 
 async function fetchDetailsUserId(userId = getUserId()){
-    const response = await api.get(`${API_URL}/api/user/${userId}/details`);
+    const response = await api.get(`/api/user/${userId}/details`);
     const data = response.data;
     return data;
 }

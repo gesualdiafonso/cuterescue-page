@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import { API_URL } from "../../config/api";
-import AuthServices from "../../services/AuthServices";
-
-const api = AuthServices.getApiInstance();
+import api from "../../services/api";
 
 export default function ModalDeletePet({ pet, onClose, onDelete }) {
     const [confirmText, setConfirmText] = useState("");
 
     async function handleDelete() {
         try {
-            const response = await api.delete(`${API_URL}/api/pets/${pet.id}`);
+            const response = await api.delete(`/api/pets/${pet.id}`);
             console.log("Pet deletado:", response.data);
             onDelete?.(); // Chame callback para atualizar UI
         } catch (err) {

@@ -1,17 +1,14 @@
-import { API_URL } from "../config/api";
 import { fetchPetsDuenoId } from "./PetService";
-import { getUserId } from "./UserService";
-import AuthServices from "./AuthServices";
+import api from "./api";
 
-const api = AuthServices.getApiInstance();
 
 //-------------------------------------//
 //           LOCATIONS PETS SERVICES   //
 //-------------------------------------//
 async function fetchLocationsPets(pet_id){
     try {
-        console.log("Fazendo uma request para:", `${API_URL}/api/locations/pets/${pet_id}`);
-        const response = await api.get(`${API_URL}/api/locations/pets/${pet_id}`);
+        console.log("Fazendo uma request para:", `/api/locations/pets/${pet_id}`);
+        const response = await api.get(`/api/locations/pets/${pet_id}`);
         console.log("Resposta recebida:", response.status, response.data);
         return response.data;
     } catch (err) {
@@ -45,7 +42,7 @@ async function loadUserPetLocation(duenoId, selectedPetId = null){
 //----------------------------//
  async function fecthAlertsByPet(pet_id){
     try{
-        const response = await api.get(`${API_URL}/api/alerts/pet/${pet_id}`);
+        const response = await api.get(`/api/alerts/pet/${pet_id}`);
         const data = response.data;
         return data;
     } catch (err){

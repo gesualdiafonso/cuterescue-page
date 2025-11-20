@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { API_URL } from "../../config/api";
 import { useSavedData } from "../../context/SavedDataContext";
-import AuthServices from "../../services/AuthServices";
+import api from "../../services/api";
 
-const api = AuthServices.getApiInstance();
 
 export default function AddPets({ onPetAdded }) {
   const { user } = useSavedData();
@@ -57,7 +55,7 @@ export default function AddPets({ onPetAdded }) {
       });
 
       // Axios envia FormData automaticamente com headers corretos
-      const response = await api.post(`${API_URL}/api/pets`, data);
+      const response = await api.post(`/api/pets`, data);
 
       console.log("Pet adicionado com sucesso:", response.data);
       alert("Pet adicionado com sucesso!");
