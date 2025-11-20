@@ -13,6 +13,11 @@ function Footer(){
                 <p>© 2024 <strong>Cute Rescue</strong>. Todos los derechos reservados.
                 </p>
             </div>
+            <div class="flex flex-col justify-self-end ">
+            <p><strong>Integrantes:</strong> Afonso Arruda Gesualdi, Lisa Bauer</p>
+            <p><strong>Docente:</strong> Jonathan Emanuel Cruz</p>
+            <p><strong>Comisión:</strong> 2 AV Noche</p>
+          </div>
         </footer>
     )
 }
