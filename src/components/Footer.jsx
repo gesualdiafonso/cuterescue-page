@@ -16,7 +16,7 @@ function Footer(){
             <div class="flex flex-col justify-self-end ">
             <p><strong>Integrantes:</strong> Afonso Arruda Gesualdi, Lisa Bauer</p>
             <p><strong>Docente:</strong> Jonathan Emanuel Cruz</p>
-            <p><strong>Comisión:</strong> 2 AV Noche</p>
+            <p><strong>Comisión:</strong> 4 AV Noche</p>
           </div>
         </footer>
     )
