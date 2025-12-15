@@ -20,6 +20,7 @@ class AuthService{
 
             localStorage.setItem(this.tokenKey, token);
             localStorage.setItem(this.userIdKey, user.id);
+            localStorage.setItem("role", user.role);
             setAuthToken(token);
 
             return { success: true, user };
@@ -74,6 +75,10 @@ class AuthService{
 
     getApiInstance(){
         return api;
+    }
+    
+    isAdmin(){
+        return localStorage.getItem("role") === 'admin';
     }
 }
 
