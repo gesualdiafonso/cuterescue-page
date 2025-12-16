@@ -1,9 +1,11 @@
 import React from "react"
+import { useNavigate } from "react-router-dom"
 import { simulatePetMovement } from "../../services/SimulacionService"
 import { useSavedData } from "../../context/SavedDataContext"
 
 
 export default function BtnSimulacion(){
+    const navigate = useNavigate();
     const { selectedPet, location, setLocation } = useSavedData();
 
     const handleSimulate = async() =>{
@@ -12,17 +14,39 @@ export default function BtnSimulacion(){
             return;
         }
 
-        try{
-            const update = await simulatePetMovement(
-                selectedPet.id,
-                location.lat,
-                location.lng
-            );
+        navigate("/pet-ubication");
 
-            setLocation(update);
-        } catch (err){
-            console.error("Falla al simular movimiento", err)
-        }
+        let currentLat = location.lat;
+        let currentLng = location.lng;
+        let count = 0;
+
+        const interval = setInterval(async () => {
+            try {
+                const response = await simulatePetMovement(
+                    selectedPet.id,
+                    currentLat,
+                    currentLng
+                );
+
+                // O axios retorna o body em response. O seu Controller retorna { message, data }
+                // Portanto, a localização real está em response.data
+                const updatedLocation = response.data; 
+
+                if (updatedLocation) {
+                    // CORREÇÃO: Passar o objeto direto, não {updatedLocation}
+                    setLocation(updatedLocation); 
+                    
+                    currentLat = updatedLocation.lat;
+                    currentLng = updatedLocation.lng;
+                }
+
+                count++;
+                if (count >= 10) clearInterval(interval);
+            } catch (err) {
+                console.error("Falla al simular movimiento", err);
+                clearInterval(interval);
+            }
+        }, 1000);
     }
     
     return (
