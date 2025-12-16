@@ -1,5 +1,23 @@
 import api from "./api";
 
+/** Función que converte Lat/Lng en ubicación usando la API de OpenStreatMap */
+async function reverseGeocode(lat, lng){
+    try{
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`,
+            {
+                headers:{
+                    'Accept-Language': 'es'
+                }
+            }
+        );
+        const data = await response.json();
+        return data.display_name || `Lat: ${lat}, Lng: ${lng}`;
+    } catch (error){
+        console.error("Error en geocodificación inversa:", error);
+        return "Ubicación desconocida";
+    }
+}
+
 /** Genera un deslocamiento de aproximadamente 10 metros */
 function generateRandomMovement(lat, lng) {
     const distance = 100; // metros
@@ -17,9 +35,12 @@ function generateRandomMovement(lat, lng) {
 async function simulatePetMovement(pet_id, currentLat, currentLng) {
     const { lat, lng } = generateRandomMovement(currentLat, currentLng);
 
+    const address = await reverseGeocode(lat, lng);
+
     const payload = {
         lat,
         lng,
+        address,
         movement_detected: true,
         timestamp: new Date().toISOString()
     };
@@ -42,9 +63,13 @@ async function simulatePetMovement(pet_id, currentLat, currentLng) {
 */
 async function triggerEmergency(pet_id, currentLat, currentLng) {
     const { lat, lng } = generateRandomMovement(currentLat, currentLng);
+
+    const address = await reverseGeocode(lat, lng);
+
     const payload = {
         lat,
         lng,
+        address,
         movement_detected: true,
         is_safe_location: false,
         timestamp: new Date().toISOString()
