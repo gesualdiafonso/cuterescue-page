@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthServices from "../services/AuthServices";
-import TramasBackground from "../../public/assets/images/elementos/vetorpatas_trama.png"
 
 
 function Register() {

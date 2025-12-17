@@ -2,8 +2,7 @@ import { Link } from "react-router-dom";
 import NavBar from "./ui/Navbar";
 import BtnLogout from "../../components/ui/BtnLogout";
 import AuthServices from "../../services/AuthServices";
-import Logo from "../../../public/assets/images/logo/isotipoLogo.png"
-import LogoText from "../../../public/assets/images/logo/logoColor.png"
+
 
 
 

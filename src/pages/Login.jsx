@@ -4,7 +4,6 @@ import SavedDataService from "../services/SavedDataServices";
 import { useState } from "react";
 import { useSavedData } from "../context/SavedDataContext";
 import { useAuth } from "../context/AuthContext";
-import TramasBackground from "../../public/assets/images/elementos/vetorpatas_trama.png"
 
 
 function Login() {

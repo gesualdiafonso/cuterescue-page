@@ -5,8 +5,7 @@ import NavBarAdmin from "./ui/NavBarAdmin";
 import PetLink from "./ui/PetLink";
 import BtnLogout from "./ui/BtnLogout";
 import AuthServices from "../services/AuthServices";
-import Logo from "../../public/assets/images/logo/isotipoLogo.png"
-import LogoText from "../../public/assets/images/logo/logoColor.png"
+
 
 
 
