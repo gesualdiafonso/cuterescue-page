@@ -4,12 +4,19 @@ import { useLocation } from 'react-router-dom'; // Importe o hook
 import Footer from './components/Footer';
 import Header from './components/Header';
 import Layout from './components/Layout';
+import Loading from './components/Loading';
+import { useSavedData } from './context/SavedDataContext';
 
 function App() {
   const location = useLocation();
+  const { loaded } = useSavedData();
 
   // Verifica se a rota atual começa com "/admin"
   const isAdminRoute = location.pathname.startsWith('/admin');
+
+  if(!loaded){
+    return <Loading />
+  }
 
   return (
     <>

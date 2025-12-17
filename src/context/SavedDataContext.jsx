@@ -93,6 +93,7 @@ export function SavedDataProvider({ children }) {
         alerts, 
         handleSelectPet,
         updatedProfilePic,
+        loaded,
         reloadData
       }}
     >
