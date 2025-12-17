@@ -25,9 +25,5 @@
         }
       ]
     }
-  ],
-  "static": {
-    "public": true,
-    "directory": "public"
-  }
+  ]
 }
