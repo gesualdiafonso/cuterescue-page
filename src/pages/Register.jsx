@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthServices from "../services/AuthServices";
+import TramasBackground from "../../public/assets/images/elementos/vetorpatas_trama.png"
+
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -31,7 +33,7 @@ function Register() {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center relative overflow-hidden">
       <img
-        src="/public/assets/images/elementos/vetorpatas_trama.png"
+        src={TramasBackground}
         alt=""
         className="absolute w-full h-full object-cover -z-10 opacity-30"
       />

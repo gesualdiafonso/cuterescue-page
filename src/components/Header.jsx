@@ -5,6 +5,8 @@ import NavBarAdmin from "./ui/NavBarAdmin";
 import PetLink from "./ui/PetLink";
 import BtnLogout from "./ui/BtnLogout";
 import AuthServices from "../services/AuthServices";
+import Logo from "../../public/assets/images/logo/isotipoLogo.png"
+import LogoText from "../../public/assets/images/logo/logoColor.png"
 
 
 
@@ -41,12 +43,12 @@ function Header(){
             <div className="flex flex-row gap-10 lg:gap-5 justify-center items-center mx-auto w-full lg:w-1/2">
                 <div>
                     <Link to="/">
-                        <img src="/public/assets/images/logo/isotipoLogo.png" alt="" />
+                        <img src={Logo} alt="" />
                     </Link>
                 </div>
                 <div>
                     <Link to="/">
-                        <img src="/public/assets/images/logo/logoColor.png" alt="" />
+                        <img src={LogoText} alt="" />
                     </Link>
                 </div>
             </div>

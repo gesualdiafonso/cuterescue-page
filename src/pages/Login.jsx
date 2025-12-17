@@ -4,6 +4,7 @@ import SavedDataService from "../services/SavedDataServices";
 import { useState } from "react";
 import { useSavedData } from "../context/SavedDataContext";
 import { useAuth } from "../context/AuthContext";
+import TramasBackground from "../../public/assets/images/elementos/vetorpatas_trama.png"
 
 
 function Login() {
@@ -36,7 +37,7 @@ function Login() {
     <div className="w-full h-screen flex flex-col justify-center items-center relative overflow-hidden">
       {/* Fundo com imagem */}
       <img
-        src="/public/assets/images/elementos/vetorpatas_trama.png"
+        src={TramasBackground}
         alt=""
         className="absolute w-full h-full object-cover -z-10 opacity-30"
       />
