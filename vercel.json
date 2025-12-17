@@ -12,7 +12,7 @@
     },
     {
       "src": "/api/(.*)",
-      "dest": "https://cuteness-rescue-backend.onrender.com/api/$1"
+      "dest": " https://cuterescue-api.onrender.com/api/$1"
     }
   ],
   "headers": [
