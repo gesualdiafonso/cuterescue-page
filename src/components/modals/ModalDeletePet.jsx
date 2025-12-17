@@ -4,13 +4,21 @@ import api from "../../services/api";
 export default function ModalDeletePet({ pet, onClose, onDelete }) {
     const [confirmText, setConfirmText] = useState("");
 
-    async function handleDelete() {
+    async function handleDelete(e) {
+        e.preventDefault();
+        if (confirmText !== pet.nombre) {
+            alert("El nombre no coincide. Por favor, escribe el nombre correcto para confirmar el borrado.");
+            return;
+        }
         try {
-            const response = await api.delete(`/api/pets/${pet.id}`);
+            const idParaDeletar = pet.id;
+            const response = await api.delete(`/api/pets/${idParaDeletar}`);
             console.log("Pet deletado:", response.data);
-            onDelete?.(); // Chame callback para atualizar UI
+            onDelete?.();
+            onClose();
         } catch (err) {
             console.error("Erro no DELETE:", err.response?.data || err.message);
+            alert("Erro al deletar: " + (err.response?.data?.error || "Erro desconhecido"));
         }
     }
     return(
@@ -25,10 +33,10 @@ export default function ModalDeletePet({ pet, onClose, onDelete }) {
                     className="w-full border border-gray-300 p-2 mb-6"
                 />
                 <div className="flex gap-5 justify-end">
-                    <button onClick={onClose} className="bg-gray-300 px-5 py-2 rounded-xl">
+                    <button type="button" onClick={onClose} className="bg-gray-300 px-5 py-2 rounded-xl">
                         Cancelar
                     </button>
-                    <button onClick={handleDelete} className="bg-red-500 text-white px-5 py-2 rounded-xl">
+                    <button type="button" onClick={handleDelete} className="bg-red-500 text-white px-5 py-2 rounded-xl">
                         Borrar
                     </button>
                 </div>
