@@ -4,17 +4,30 @@
     {
       "source": "/(.*)",
       "destination": "/index.html"
-    }
-  ],
-  "routes": [
+    },
     {
       "src": "/uploads/(.*)",
       "dest": "/uploads/$1",
       "continue": true
     },
     {
-      "src": "/(.*)",
-      "dest": "index.js"
+      "src": "/api/(.*)",
+      "dest": "https://cuteness-rescue-backend.onrender.com/api/$1"
     }
-  ]
+  ],
+  "headers": [
+    {
+      "source": "/uploads/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
+  "static": {
+    "public": true,
+    "directory": "public"
+  }
 }
