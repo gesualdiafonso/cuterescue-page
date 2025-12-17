@@ -4,6 +4,7 @@ import BtnSimulacion from "./ui/BtnSimulacion"
 import BtnEmergency from "./ui/BtnEmergency"
 import { fetchDetailsUserId } from "../services/UserService"
 import { API_URL } from "../config/api"
+import Loading from "./Loading"
 
 export default function PersonalInform(){
     const [details, setDetails ] = useState(null);
@@ -21,7 +22,7 @@ export default function PersonalInform(){
     }, []);
 
     if (!details) {
-        return <div>Loading...</div>;
+        return <Loading/>;
     }
 
     const { nombre, ubicacion } = details;

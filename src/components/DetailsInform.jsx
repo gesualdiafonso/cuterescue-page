@@ -3,12 +3,13 @@ import { API_URL } from "../config/api";
 import { Link } from "react-router-dom";
 import { useSavedData } from "../context/SavedDataContext";
 import BtnEditProfile from "./ui/BtnEditProfile";
+import Loading from "./Loading";
 
 export default function DetailsInform(){
   const { user, details, setDetails } = useSavedData();
   const[localDetails, setLocalDetails] = useState(details)
 
-  if (!user || !details) return <div>Loading...</div>;
+  if (!user || !details) return <Loading />;
 
   const handleUpdate = (updatedData) => {
     setLocalDetails(updatedData);

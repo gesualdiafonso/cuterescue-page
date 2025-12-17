@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getEvents, editEvents, deleteEvents } from "../../services/AdminService";
+import Loading from "../../components/Loading";
 
 export default function ControlEvents() {
     const [events, setEvents] = useState([]);
@@ -55,7 +56,7 @@ export default function ControlEvents() {
         }
     };
 
-    if (loading) return <div className="text-center p-10">Cargando eventos...</div>;
+    if (loading) return <Loading/>;
 
     return (
         <div className="max-w-7xl mx-auto p-6">

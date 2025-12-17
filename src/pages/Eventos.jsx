@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getAllEvents } from "../services/AdminService";
+import Loading from "../components/Loading";
 
 export default function Eventos() {
   const [events, setEvents] = useState([]);
@@ -27,7 +28,7 @@ export default function Eventos() {
     loadEvents();
   }, []);
 
-  if (loading) return <p className="text-center py-10">Cargando eventos...</p>;
+  if (loading) return <Loading />;
   if (error) return <p className="text-center py-10 text-red-500">Error: {error}</p>;
 
   return (

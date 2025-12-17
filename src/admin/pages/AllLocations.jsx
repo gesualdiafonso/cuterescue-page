@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { getLocations, getEnrichedLocationData } from "../../services/AdminService";
+import Loading from "../../components/Loading";
 
 // Corrigir o ícone padrão do Leaflet, pois o Webpack/React pode ter problemas
 delete L.Icon.Default.prototype._getIconUrl;
@@ -51,7 +52,7 @@ export default function AllLocations(){
     }, []);
 
     if (loading) {
-        return <div style={{ padding: "20px" }} className="max-w-4xl mx-auto">Cargando todas las ubicaciones...</div>;
+        return <Loading />;
     }
 
     if (error) {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState} from "react";
 import { getCountPets, getCountUsers, getEvents, getLocations, getCountLocations, getPets, getUsers } from "../../services/AdminService";
+import Loading from "../../components/Loading";
 
 // Importações do Chart.js
 import {
@@ -34,9 +35,12 @@ export default function DashboardAdmin(){
         allLocations: []
     });
 
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         async function loadData(){
             try {
+                setLoading(true);
                 const usersCountData = await getCountUsers();
                 const petsCountData = await getCountPets();
                 const locationsCountData = await getCountLocations();
@@ -56,6 +60,8 @@ export default function DashboardAdmin(){
             } catch (error) {
                 console.error("Erro al cargar los datos del admin")
                 console.log(error);
+            } finally{
+                setLoading(false);
             }
         }
 
@@ -91,6 +97,11 @@ export default function DashboardAdmin(){
             title: { display: true, text: 'Estatísticas Gerais do Sistema' },
         },
     };
+
+    
+    if (loading) {
+        return <Loading />;
+    }
 
     return(
     <div className="max-w-7xl mx-auto p-0">

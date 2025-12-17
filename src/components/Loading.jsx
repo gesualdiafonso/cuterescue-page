@@ -4,11 +4,11 @@ export default function Loading() {
     <div style={styles.overlay}>
       <div style={styles.container}>
         <img 
-          src="/assets/logo/IsotipoLogo.png" 
+          src="/assets/images/logo/IsotipoLogo.png" 
           alt="Cuterescue Logo" 
           style={styles.logo} 
         />
-        <h2 style={styles.text}>Carregando...</h2>
+        <h2 style={styles.text}>Cargando...</h2>
       </div>
     </div>
   );
