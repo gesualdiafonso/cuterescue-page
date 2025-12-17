@@ -23,7 +23,7 @@ export default function InformePet(){
 
     return(
         <div className="max-w-7xl mx-auto p-0">
-            <section className="flex gap-20 mb-10">
+            <section className="flex gap-20 mb-10 py-5 px-3">
                 <PetCards
                     pets={pets}
                     selectedPet={selectedPet}

@@ -23,7 +23,7 @@ function Home() {
 
       <div className="bg-black w-full h-0.5 my-10" />
 
-      <section className="flex gap-20 mb-10 w-full justify-center items-center">
+      <section className="flex gap-20 mb-10 w-full justify-center items-center px-3 py-5">
         <PetCards
           pets={pets}
           selectedPet={selectedPet}

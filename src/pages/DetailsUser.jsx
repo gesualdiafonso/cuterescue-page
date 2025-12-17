@@ -15,7 +15,7 @@ export default function DetailsUser(){
                 <DetailsInform />
             </section>
             <div className="bg-black w-full h-0.5 my-10"/>
-            <section>
+            <section className="py-5 px-3">
                 <PetCards
                     pets={pets}
                     selectedPet={selectedPet}
