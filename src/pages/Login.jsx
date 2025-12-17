@@ -37,8 +37,8 @@ function Login() {
     <div className="w-full h-screen flex flex-col justify-center items-center relative overflow-hidden">
       {/* Fundo com imagem */}
       <img
-        src={TramasBackground}
-        alt=""
+        src="/assets/images/elementos/vetorpatas_trama.png"
+        alt="Tramas de vetor con patas de mascotas"
         className="absolute w-full h-full object-cover -z-10 opacity-30"
       />
 

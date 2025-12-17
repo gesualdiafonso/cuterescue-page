@@ -43,12 +43,12 @@ function Header(){
             <div className="flex flex-row gap-10 lg:gap-5 justify-center items-center mx-auto w-full lg:w-1/2">
                 <div>
                     <Link to="/">
-                        <img src={Logo} alt="" />
+                        <img src="/assets/images/logo/isotipoLogo.png" alt="Logo" />
                     </Link>
                 </div>
                 <div>
                     <Link to="/">
-                        <img src={LogoText} alt="" />
+                        <img src="/assets/images/logo/logoColor.png" alt="Logo Texto" />
                     </Link>
                 </div>
             </div>
