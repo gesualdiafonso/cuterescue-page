@@ -26,10 +26,16 @@ export default function ControlEvents() {
         }
     };
 
-    const handleDelete = async (eventId) => {
+    const handleDelete = async (event) => {
+        const mongoId = event._id.$oid || event._id
         if (window.confirm("¿Estás seguro de que deseas eliminar este evento?")) {
-            await deleteEvents(eventId);
-            loadEvents();
+            try {
+                await deleteEvents(mongoId);
+                loadEvents();
+            } catch (error){
+                console.error("Erro ao deletar:", error);
+                alert("Erro al borra el evento.");
+            }
         }
     };
 
@@ -83,7 +89,7 @@ export default function ControlEvents() {
                             >
                                 Editar
                             </button>
-                            <button onClick={() => handleDelete(event.id)} className="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                            <button onClick={() => handleDelete(event)} className="text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
                                 Eliminar
                             </button>
                         </div>
