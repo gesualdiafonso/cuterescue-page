@@ -18,12 +18,12 @@ function HeaderAdmin(){
             <div className="flex flex-row gap-10 lg:gap-5 justify-center items-center mx-auto w-full lg:w-1/2">
                 <div>
                     <Link to="/admin/dashboard">
-                        <img src="/assets/images/logo/isotipoLogo.png" alt="Logo" />
+                        <img src="/assets/images/logo/IsotipoLogo.png" alt="Logo" />
                     </Link>
                 </div>
                 <div>
                     <Link to="/admin/dashboard">
-                        <img src="/assets/images/logo/logoColor.png" alt="Logo Texto" />
+                        <img src="/assets/images/logo/LogoColor.png" alt="Logo Texto" />
                     </Link>
                 </div>
             </div>
