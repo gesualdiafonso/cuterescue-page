@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getUserDetails, getPetById } from "../../services/AdminService";
+import Loading from "../../components/Loading"
 
 export default function UserDetail() {
     const { userId } = useParams(); // Pega o :id da URL (que é o userId)
@@ -41,7 +42,7 @@ export default function UserDetail() {
     }, [userId]); // Executa novamente se o userId mudar
 
     if (loading) {
-        return <div className="max-w-4xl mx-auto p-4">Cargando detalles de usuario...</div>;
+        return <Loading />;
     }
 
     if (error) {

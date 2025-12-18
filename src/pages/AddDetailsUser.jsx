@@ -39,7 +39,7 @@ function AddDetailsUser() {
   return (
     <div className="w-full h-screen flex flex-col justify-center items-center relative overflow-hidden">
       <img
-        src="/public/assets/images/elementos/vetorpatas_trama.png"
+        src="/assets/images/elementos/vetorpatas_trama.png"
         alt=""
         className="absolute w-full h-full object-cover -z-10 opacity-30"
       />

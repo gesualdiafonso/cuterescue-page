@@ -5,6 +5,7 @@ import api, { setAuthToken } from "./api";
 class AuthService{
     tokenKey = "token";
     userIdKey = "userId";
+    roleKey = "role";
 
     constructor(){
         // Inicializa o serviço de API com interceptadores
@@ -52,9 +53,13 @@ class AuthService{
         }
     }
 
+    getUserRole(){
+        return localStorage.getItem(this.roleKey);
+    }
     logout() {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userIdKey);
+        localStorage.removeItem(this.roleKey);
         setAuthToken(null);
     }
 
@@ -78,7 +83,7 @@ class AuthService{
     }
     
     isAdmin(){
-        return localStorage.getItem("role") === 'admin';
+        return this.getUserRole() === 'admin';
     }
 }
 

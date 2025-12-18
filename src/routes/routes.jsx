@@ -15,6 +15,8 @@ import ControlUser from "../admin/pages/ControlUser";
 import AgregarEvents from "../admin/pages/AgregarEvents";
 import UserDetail from "../admin/pages/UserDetail";
 import AllLocations from "../admin/pages/AllLocations";
+import Forbidden from "../pages/Forbidden";
+import NotFound from "../pages/NotFound";
 
 // Rotas usuario
 const userRoutes = [
@@ -83,7 +85,7 @@ const userRoutes = [
 const adminRoutes = {
     path: "/admin",
     element: (
-        <ProtectedRout isAdmin={true}> 
+        <ProtectedRout isAdminRequired={true}> 
             <AdminLayout /> 
         </ProtectedRout>
     ),
@@ -134,10 +136,24 @@ const authRoute = [
     },
 ]
 
+const errorRoutes = [
+    {
+        path: "/forbidden",
+        element: <Forbidden />,
+        title: "Acesso Denegado - 403"
+    },
+    {
+        path: "*", // Captura qualquer rota não definida acima
+        element: <NotFound />,
+        title: "Pagina no encontrada - 404"
+    }
+];
+
 const routes = [
     ...authRoute,
     adminRoutes,
-    ...userRoutes
+    ...userRoutes,
+    ...errorRoutes
 ]
 
 export default routes;
